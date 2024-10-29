@@ -393,7 +393,7 @@ def convert(
                           end='\r')
 
                     with ts.Transaction() as txn:
-                        dat = tsread[
+                        dat = tsread.with_transaction(txn)[
                             ...,
                             cz*max_load:(cz+1)*max_load,
                             cy*max_load:(cy+1)*max_load,
@@ -420,7 +420,7 @@ def convert(
                         ])
                         dat = np.median(dat, -1)
 
-                        tswrite[
+                        tswrite.with_transaction(txn)[
                             ...,
                             cz*max_load//2:(cz+1)*max_load//2,
                             cy*max_load//2:(cy+1)*max_load//2,
