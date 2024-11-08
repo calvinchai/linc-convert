@@ -1,0 +1,15 @@
+name: Install OpenJPEG
+
+on:
+  workflow_call:
+
+jobs:
+  install_openjpeg:
+    runs-on: windows-latest
+   
+    steps:
+      
+      - name: Install cygwin on Windows with openjpeg
+        uses: cygwin/cygwin-install-action@master
+        with:
+          packages: openjpeg
