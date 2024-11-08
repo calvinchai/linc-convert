@@ -20,6 +20,7 @@ jobs:
         if: matrix.os == 'macos-latest'
         uses: melusina-org/setup-macports@v1
       - name: Install OpenJPEG on macOS
+        if: matrix.os == 'macos-latest'
         run: |
           port install openjpeg
 
