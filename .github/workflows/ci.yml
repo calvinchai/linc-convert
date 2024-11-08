@@ -39,7 +39,7 @@ jobs:
         if: matrix.os == 'macos-latest'
         
         run: |
-          OPENJP2_PATH=$(find /opt/homebrew/Cellar/openjpeg/ -name "libopenjp2.*" | head -n 1)
+          OPENJP2_PATH=$(find /opt/homebrew/Cellar/openjpeg/ -name "libopenjp2.a" | head -n 1)
           echo "OPENJP2_PATH=$OPENJP2_PATH" >> $GITHUB_ENV
           mkdir -p $HOME/.config/glymur
           echo "[library]" > $HOME/.config/glymur/glymurrc
@@ -50,13 +50,26 @@ jobs:
         uses: cygwin/cygwin-install-action@master
         if: matrix.os == 'windows-latest'
         with:
-          packages: openjpeg
+          packages: openjpeg findutils coreutils
       - name: Check openjpeg windows 
         if: matrix.os == 'windows-latest'
         run: |
           cygcheck -l openjpeg
+      - name: Setup windows
+        if: matrix.os == 'windows-latest'
+        shell: bash
+        run: |
+          # OPENJP2_PATH=$(find /usr/lib/ -name "libopenjp2.*" | head -n 1)
+          # echo "OPENJP2_PATH=$OPENJP2_PATH" >> $GITHUB_ENV
+          mkdir -p ~/glymur
+          echo "[library]" > ~/glymur/glymurrc
+          echo "openjpeg: usr/bin/cygopenjpeg-1.dll" >> ~/glymur/glymurrc
+          
 
-      
+
+
+
+        
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
