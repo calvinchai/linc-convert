@@ -9,12 +9,18 @@ jobs:
         python-version: ["3.10", "3.11", "3.12", "3.13"]
         poetry-version: ["latest", "1.8.4"]
         # glymur needs dynamic library on macos and windows, and causing error
-        # os: [ubuntu-22.04, macos-latest, windows-latest]
-        os: [ubuntu-22.04]
+        os: [ubuntu-22.04, macos-latest, windows-latest]
+        # os: [ubuntu-22.04]
         
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+      - name: Setup OpenJPEG on macOS
+        if: matrix.os == 'macos-latest'
+        uses: ./.github/workflows/install_openjpeg_macos.yml
+      - name: Setup OpenJPEG on windows
+        if: matrix.os == 'windows-latest'
+        uses: ./.github/workflows/install_openjpeg_windows.yml
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
@@ -27,7 +33,13 @@ jobs:
       - name: Setup a local virtual environment (if no poetry.toml file)
         run: |
           poetry config virtualenvs.create true --local
-          poetry config virtualenvs.in-project true --local
+          poetry config virtualenvs.in-project true --lon: ["latest", "1.8.4"]
+        # glymur needs dynamic library on macos and windows, and causing error
+        # os: [ubuntu-22.04, macos-latest, windows-latest]
+        os: [ubuntu-22.04]
+        
+    runs-on: ${{ matrix.os }}
+    steps:ocal
       - uses: actions/cache@v3
         name: Define a cache for the virtual environment based on the dependencies lock file
         with:
