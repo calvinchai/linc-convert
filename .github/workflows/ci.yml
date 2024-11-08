@@ -17,53 +17,59 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      # - name: Setup OpenJPEG on macOS
-      #   if: matrix.os == 'macos-latest'
-      #   uses: melusina-org/setup-macports@v1
-      # - name: Install OpenJPEG on macOS
-      #   if: matrix.os == 'macos-latest'
-      #   run: |
-      #     port install openjpeg
-
       - name: Setup OpenJPEG on macOS
         if: matrix.os == 'macos-latest'
-        uses: tecolicom/actions-use-homebrew-tools@v1
-        with:
-          tools: 'openjpeg'
-          cache: yes
+        uses: melusina-org/setup-macports@v1
       - name: Install OpenJPEG on macOS
         if: matrix.os == 'macos-latest'
         run: |
-          brew ls openjpeg
-      - name: Set OpenJPEG on macOS
-        if: matrix.os == 'macos-latest'
+          port install openjpeg
+          echo "$PATH"
+      # - name: Setup OpenJPEG on macOS
+      #   if: matrix.os == 'macos-latest'
+      #   uses: tecolicom/actions-use-homebrew-tools@v1
+      #   with:
+      #     tools: 'openjpeg'
+      #     cache: yes
+      # - name: Install OpenJPEG on macOS
+      #   if: matrix.os == 'macos-latest'
+      #   run: |
+      #     brew ls openjpeg
+      # - name: Set OpenJPEG on macOS
+      #   if: matrix.os == 'macos-latest'
         
-        run: |
-          OPENJP2_PATH=$(find /opt/homebrew/Cellar/openjpeg/ -name "libopenjp2.a" | head -n 1)
-          echo "OPENJP2_PATH=$OPENJP2_PATH" >> $GITHUB_ENV
-          mkdir -p $HOME/.config/glymur
-          echo "[library]" > $HOME/.config/glymur/glymurrc
-          echo "openjp2: $OPENJP2_PATH" >> $HOME/.config/glymur/glymurrc
-          cat $HOME/.config/glymur/glymurrc
+        # run: |
+        #   OPENJP2_PATH=$(find /opt/homebrew/Cellar/openjpeg/ -name "libopenjp2.a" | head -n 1)
+        #   echo "OPENJP2_PATH=$OPENJP2_PATH" >> $GITHUB_ENV
+        #   mkdir -p $HOME/.config/glymur
+        #   echo "[library]" > $HOME/.config/glymur/glymurrc
+        #   echo "openjp2: $OPENJP2_PATH" >> $HOME/.config/glymur/glymurrc
+        #   cat $HOME/.config/glymur/glymurrc
         
       - name: Install cygwin on Windows with openjpeg
         uses: cygwin/cygwin-install-action@master
         if: matrix.os == 'windows-latest'
         with:
-          packages: openjpeg findutils coreutils
+          packages: libopenjp2-devel findutils coreutils
       - name: Check openjpeg windows 
         if: matrix.os == 'windows-latest'
         run: |
-          cygcheck -l openjpeg
-      - name: Setup windows
+          cygcheck -l libopenjp2-devel
+      - name: Check openjpeg windows 
         if: matrix.os == 'windows-latest'
         shell: bash
         run: |
-          # OPENJP2_PATH=$(find /usr/lib/ -name "libopenjp2.*" | head -n 1)
-          # echo "OPENJP2_PATH=$OPENJP2_PATH" >> $GITHUB_ENV
-          mkdir -p ~/glymur
-          echo "[library]" > ~/glymur/glymurrc
-          echo "openjpeg: usr/bin/cygopenjpeg-1.dll" >> ~/glymur/glymurrc
+          echo "$PATH"
+          
+      # - name: Setup windows
+      #   if: matrix.os == 'windows-latest'
+      #   shell: bash
+      #   run: |
+      #     # OPENJP2_PATH=$(find /usr/lib/ -name "libopenjp2.*" | head -n 1)
+      #     # echo "OPENJP2_PATH=$OPENJP2_PATH" >> $GITHUB_ENV
+      #     mkdir -p ~/glymur
+      #     echo "[library]" > ~/glymur/glymurrc
+      #     echo "openjpeg: usr/bin/cygopenjpeg-1.dll" >> ~/glymur/glymurrc
           
 
 
