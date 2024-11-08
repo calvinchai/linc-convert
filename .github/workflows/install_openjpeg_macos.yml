@@ -1,0 +1,20 @@
+name: Install OpenJPEG
+
+on:
+  workflow_call:
+
+jobs:
+  install_openjpeg:
+    runs-on: macos-latest
+    steps:
+      - name: Check OS
+        id: check-os
+        run: echo "Running on ${{ matrix.os }}"
+
+      # macOS setup
+      - name: Install Homebrew on macOS
+        uses: melusina-org/setup-macports@v1
+      
+      - name: Install OpenJPEG on macOS
+        run: |
+          port install openjpeg
