@@ -15,12 +15,21 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+      
       - name: Setup OpenJPEG on macOS
         if: matrix.os == 'macos-latest'
-        uses: ./.github/workflows/install_openjpeg_macos.yml
-      - name: Setup OpenJPEG on windows
+        uses: melusina-org/setup-macports@v1
+      - name: Install OpenJPEG on macOS
+        run: |
+          port install openjpeg
+
+          
+      - name: Install cygwin on Windows with openjpeg
+        uses: cygwin/cygwin-install-action@master
         if: matrix.os == 'windows-latest'
-        uses: ./.github/workflows/install_openjpeg_windows.yml
+        with:
+          packages: openjpeg
+      
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
