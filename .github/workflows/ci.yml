@@ -16,20 +16,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      # - name: Setup OpenJPEG on macOS
+      #   if: matrix.os == 'macos-latest'
+      #   uses: melusina-org/setup-macports@v1
+      # - name: Install OpenJPEG on macOS
+      #   if: matrix.os == 'macos-latest'
+      #   run: |
+      #     port install openjpeg
+
       - name: Setup OpenJPEG on macOS
         if: matrix.os == 'macos-latest'
-        uses: melusina-org/setup-macports@v1
+        uses: tecolicom/actions-use-homebrew-tools@v1
+        with:
+          tools: 'openjpeg'
+          cache: yes
       - name: Install OpenJPEG on macOS
         if: matrix.os == 'macos-latest'
         run: |
-          port install openjpeg
-
+          brew ls openjpeg
           
       - name: Install cygwin on Windows with openjpeg
         uses: cygwin/cygwin-install-action@master
         if: matrix.os == 'windows-latest'
         with:
           packages: openjpeg
+      - name: Check openjpeg windows 
+        if: matrix.os == 'windows-latest'
+        run: |
+          cygcheck -c openjpeg
+
       
       - uses: actions/setup-python@v5
         with:
